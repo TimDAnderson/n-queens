@@ -110,11 +110,9 @@
       let board = this.attributes;
       let matrixKeys = Object.keys(board);
 
-      for (var i = 0; i < matrixKeys.length-1; i++) {
+      for (var i = 0; i < matrixKeys.length - 1; i++) {
 
-        if (this.hasRowConflictAt(i)) {
-          return true;
-        }
+        if (this.hasRowConflictAt(i)) { return true; }
 
       }
       return false; // fixme
@@ -129,15 +127,14 @@
     hasColConflictAt: function(colIndex) {
 
       // iterate through attribute keys, only look at attribute keys (which is an array) at the index that is colIndex
-
       let matrixKeys = Object.keys(this.attributes);
       let columnArray = [];
       for (var i = 0; i < matrixKeys.length - 1; i++) {
         columnArray.push(this.attributes[i][colIndex]);
       }
 
-      console.log(columnArray);
-      var pieceCount = 0;
+      // console.log(columnArray);
+      let pieceCount = 0;
       for (var i = 0; i < columnArray.length; i++) {
         if (columnArray[i] !== 0 ) { pieceCount++; }
         if (pieceCount > 1) { return true; }
@@ -167,11 +164,112 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      /**
+
+
+
+       * -> [0, 0, 0, 0]
+    1 [0, 1, 0, 0],
+    2 [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+
+
+
+          * -> [1, 1, 0]
+    1 [0, 1, 0, 0],
+    2 [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+
+
+
+             * -> [0, 0]
+    1 [0, 1, 0, 0],
+    2 [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+
+             */
+
+      //declare an empry array
+      var diagArray = [];
+
+
+      //we should identify how many spots we need to check for existance
+        // take the length of row 1 and subtract majorDiagonalColumnIndexAtFirstRow
+      var stepCount = this.attributes[0].length - majorDiagonalColumnIndexAtFirstRow;
+
+      var currentColumn = majorDiagonalColumnIndexAtFirstRow;
+      var currentRow = 0;
+
+      //do a while loop here, while stepCount is greater than 0;
+      while (stepCount > 0) {
+        diagArray.push(this.attributes[currentRow][currentColumn]);
+
+        //incriment currentColumn
+        currentColumn++;
+
+        //incriment currentRow
+        currentRow++;
+
+        //decrement stepCount
+        stepCount--;
+      }
+      console.log(diagArray);
+
+      // check array to see if there is more than one 1
+      let pieceCount = 0;
+
+      for (var i = 0; i < diagArray.length; i++) {
+        if (diagArray[i] !== 0) { pieceCount++; }
+        if (pieceCount > 1) { return true; }
+      }
+
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      /**
+
+
+
+       * -> [0, 0, 0, 0]
+    1 [0, 1, 0, 0],
+    2 [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+
+
+
+          * -> [1, 1, 0]
+    1 [0, 1, 0, 0],
+    2 [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+
+
+
+             * -> [0, 0]
+    1 [0, 1, 0, 0],
+    2 [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+
+             */
+
+      var firstRow = this.attributes[0];
+
+      // iterate through the 1st row
+      for (let i = 0; i < firstRow.length; i++) {
+
+        // invoke hasMajorDiagonalConflictAt the currentIndex
+        // if hasMajorDiagonalConflictAt returns true, return true
+        if (this.hasMajorDiagonalConflictAt(i)) { return true; }
+      }
+
+      // once outside the loop, return false
       return false; // fixme
     },
 
