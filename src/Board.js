@@ -90,10 +90,14 @@
       //iterate over rowArray
       for (var i = 0; i < currentRow.length; i++) {
         let currentValue = currentRow[i];
-        //if counter is above 1
 
-          //return true
+        //if counter is above 1
+        //return true
+        if (pieceCount > 1) { return true; }
+
         //if rowarray at i is 1, incriment counter by 1
+        if (currentValue !== 0) { pieceCount++; }
+
       }
 
       // if we get out of the loop, return false
@@ -102,9 +106,17 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      console.log('this is my message');
-      //call has RowConflicts on every row
-      //if every row has no conflicts return false
+
+      let board = this.attributes;
+      let matrixKeys = Object.keys(board);
+
+      for (var i = 0; i < matrixKeys.length-1; i++) {
+
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+
+      }
       return false; // fixme
     },
 
@@ -115,11 +127,36 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+
+      // iterate through attribute keys, only look at attribute keys (which is an array) at the index that is colIndex
+
+      let matrixKeys = Object.keys(this.attributes);
+      let columnArray = [];
+      for (var i = 0; i < matrixKeys.length - 1; i++) {
+        columnArray.push(this.attributes[i][colIndex]);
+      }
+
+      console.log(columnArray);
+      var pieceCount = 0;
+      for (var i = 0; i < columnArray.length; i++) {
+        if (columnArray[i] !== 0 ) { pieceCount++; }
+        if (pieceCount > 1) { return true; }
+      }
+
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+
+      let columnIndexArray = this.attributes[0];
+
+      //iterate through this.attributes[0] which will be the column indixies
+      for (var i = 0; i < columnIndexArray.length; i++) { //each i in this for loop is a colIndex
+
+        //if column at colIndex has conflict
+        if (this.hasColConflictAt(i)) { return true; }
+      }
       return false; // fixme
     },
 
