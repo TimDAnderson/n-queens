@@ -7,6 +7,7 @@
   window.Board = Backbone.Model.extend({
 
     initialize: function (params) {
+      console.log('HI');
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log('Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:');
         console.log('\t1. An object. To create an empty board of size n:\n\t\t{n: %c<num>%c} - Where %c<num> %cis the dimension of the (empty) board you wish to instantiate\n\t\t%cEXAMPLE: var board = new Board({n:5})', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: grey;');
@@ -78,12 +79,32 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
-    hasRowConflictAt: function(rowIndex) {
+    hasRowConflictAt: function(rowIndex) { //rowIndex is in an integar
+      // rowArray is going to be matrix[index];
+      //this.attributes is an object.  the keys are the row arrays
+      //a row index is going to be this.attributes[rowIndex]
+      var currentRow = this.attributes[rowIndex];
+      // create a counter for (non-zero element)
+      var pieceCount = 0;
+
+      //iterate over rowArray
+      for (var i = 0; i < currentRow.length; i++) {
+        let currentValue = currentRow[i];
+        //if counter is above 1
+
+          //return true
+        //if rowarray at i is 1, incriment counter by 1
+      }
+
+      // if we get out of the loop, return false
       return false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      console.log('this is my message');
+      //call has RowConflicts on every row
+      //if every row has no conflicts return false
       return false; // fixme
     },
 
