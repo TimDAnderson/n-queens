@@ -7,7 +7,7 @@
   window.Board = Backbone.Model.extend({
 
     initialize: function (params) {
-      console.log('HI');
+      //console.log('HI');
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log('Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:');
         console.log('\t1. An object. To create an empty board of size n:\n\t\t{n: %c<num>%c} - Where %c<num> %cis the dimension of the (empty) board you wish to instantiate\n\t\t%cEXAMPLE: var board = new Board({n:5})', 'color: blue;', 'color: black;', 'color: blue;', 'color: black;', 'color: grey;');
@@ -229,6 +229,32 @@
       return false; // fixme
     },
 
+
+    //add new function here that looks down instead of over
+    hasMajorDiagonalConflictAtBottom: function(majorDiagonalColumnIndex) {
+      var diagArray = [];
+      var stepCount = this.attributes['n'] - majorDiagonalColumnIndex;
+      var currentColumn = 0;
+      var currentRow = majorDiagonalColumnIndex;
+
+      while (stepCount > 0) {
+        diagArray.push(this.attributes[currentRow][currentColumn]);
+        currentColumn++;
+        currentRow++;
+        stepCount--;
+      }
+
+      // check array to see if there is more than one 1
+      let pieceCount = 0;
+      for (var i = 0; i < diagArray.length; i++) {
+        if (diagArray[i] !== 0) { pieceCount++; }
+        if (pieceCount > 1) { return true; }
+      }
+
+      return false;
+    },
+
+
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       /**
@@ -269,6 +295,18 @@
         if (this.hasMajorDiagonalConflictAt(i)) { return true; }
       }
 
+
+
+      //iterate through new function that checks down not over
+      //hasMajorDiagonalConflictAtBottom()
+      //make a while loop starting at 1, go to n
+      for (let i = 1; i < this.attributes['n']; i++) {
+        //in the while loop call hasMajorDiagonalConflictAtBottom
+        if (this.hasMajorDiagonalConflictAtBottom(i)) { return true; }
+        //return true if we find a conflict
+      }
+
+
       // once outside the loop, return false
       return false; // fixme
     },
@@ -280,11 +318,103 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      /**
+       0  1  2  3
+                 * -> [1, 0, 1, 0]
+    1 [0, 0, 0, 1],
+    2 [0, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 0, 0]
+
+      stepCount = minorDiagonalColumnIndexAtFirstRow + 1;
+
+             */
+      var diagArray = [];
+      var stepCount = minorDiagonalColumnIndexAtFirstRow + 1;
+      var currentColumn = minorDiagonalColumnIndexAtFirstRow;
+      var currentRow = 0;
+
+      while (stepCount > 0) {
+        diagArray.push(this.attributes[currentRow][currentColumn]);
+
+        currentRow++;
+        currentColumn--;
+        stepCount--;
+      }
+
+      // check array to see if there is more than one 1
+      let pieceCount = 0;
+
+      for (var i = 0; i < diagArray.length; i++) {
+        if (diagArray[i] !== 0) { pieceCount++; }
+        if (pieceCount > 1) { return true; }
+      }
+
+      return false; // fixme
+    },
+
+    hasMinorDiagonalConflictAtBottom: function(minorDiagonalColumnIndex) {
+      /**
+       0  1  2  3
+                 * -> [1, 0, 1, 0]
+i = 0 [0, 0, 0, 0], <- index 0
+i = 1 [0, 0, 0, 0], <-index 1
+      [0, 0, 0, 1], <-index 2
+      [0, 0, 1, 0]
+             */
+
+      var diagArray = [];
+      var stepCount = this.attributes['n'] - minorDiagonalColumnIndex;
+      // var currentColumn = minorDiagonalColumnIndex;
+      var currentColumn = this.attributes[0].length - 1;
+      var currentRow = minorDiagonalColumnIndex;
+
+      while (stepCount > 0) {
+        diagArray.push(this.attributes[currentRow][currentColumn]);
+        currentColumn--;
+        currentRow++;
+        stepCount--;
+      }
+
+      // check array to see if there is more than one 1
+      let pieceCount = 0;
+      for (var i = 0; i < diagArray.length; i++) {
+        if (diagArray[i] !== 0) { pieceCount++; }
+        if (pieceCount > 1) { return true; }
+      }
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      /**
+       0  1  2  3
+                 * -> [1, 0, 1, 0]
+i = 0 [0, 0, 0, 0], <- index 0
+i = 1 [0, 0, 0, 0], <-index 1
+      [0, 0, 0, 1], <-index 2
+      [0, 0, 1, 0]
+             */
+
+      var firstRow = this.attributes[0];
+
+      // iterate through the 1st row
+      for (let i = 0; i < firstRow.length; i++) {
+
+        // invoke hasMajorDiagonalConflictAt the currentIndex
+        // if hasMajorDiagonalConflictAt returns true, return true
+        if (this.hasMinorDiagonalConflictAt(i)) { return true; }
+      }
+
+
+      //iterate through new function that checks down not over
+      //hasMajorDiagonalConflictAtBottom()
+      //make a while loop starting at 1, go to n
+      for (let i = 1; i < this.attributes['n']; i++) {
+        //in the while loop call hasMajorDiagonalConflictAtBottom
+        if (this.hasMinorDiagonalConflictAtBottom(i)) { return true; }
+        //return true if we find a conflict
+      }
       return false; // fixme
     }
 
