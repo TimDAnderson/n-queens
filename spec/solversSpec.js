@@ -12,8 +12,14 @@ describe('solvers', function() {
           }, 0);
         }, 0);
 
+        console.log('LOGGING THE NUMBER OF PIECES BELOW');
+        console.log(numPieces);
+        console.log('solutionBoard = ', solutionBoard);
+
         expect(solutionBoard.get('n')).to.equal(n);
         expect(numPieces).to.equal(n);
+
+        console.log('n = ', n);
         expect(solutionBoard.hasAnyRooksConflicts()).to.be.equal(false);
       });
     });
