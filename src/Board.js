@@ -43,6 +43,9 @@
     },
 
     hasAnyQueenConflictsOn: function(rowIndex, colIndex) {
+      // console.log('LOOKING FOR QUEEN CONFLICT');
+      // console.log(rowIndex);
+      // console.log(colIndex);
       return (
         this.hasRowConflictAt(rowIndex) ||
         this.hasColConflictAt(colIndex) ||
@@ -80,23 +83,27 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) { //rowIndex is in an integar
+      // console.log('LOOKING FOR A ROW CONFLICT');
+      // console.log(rowIndex);
       // rowArray is going to be matrix[index];
       //this.attributes is an object.  the keys are the row arrays
       //a row index is going to be this.attributes[rowIndex]
       var currentRow = this.attributes[rowIndex];
+      console.log(this.attributes[rowIndex]);
       // create a counter for (non-zero element)
       var pieceCount = 0;
 
       //iterate over rowArray
       for (var i = 0; i < currentRow.length; i++) {
-        let currentValue = currentRow[i];
+        var currentValue = currentRow[i];
+
+        //BUG FIXED, RETURN HAD TO GO BELOW THE COUNTER INCRIMENT
+        //if rowarray at i is 1, incriment counter by 1
+        if (currentValue !== 0) { pieceCount++; }
 
         //if counter is above 1
         //return true
         if (pieceCount > 1) { return true; }
-
-        //if rowarray at i is 1, incriment counter by 1
-        if (currentValue !== 0) { pieceCount++; }
 
       }
 
@@ -106,6 +113,7 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+
 
       let board = this.attributes;
       let matrixKeys = Object.keys(board);
@@ -192,6 +200,13 @@
 
              */
 
+      // console.log('THIS IS THE MAJOR DIAGANAL COLUM INDEX AT FIRST ROW');
+      // console.log(majorDiagonalColumnIndexAtFirstRow);
+      if (majorDiagonalColumnIndexAtFirstRow < 0) {
+        var rowIndex = Math.abs(majorDiagonalColumnIndexAtFirstRow);
+        return (this.hasMajorDiagonalConflictAtBottom(rowIndex));
+      }
+
       //declare an empry array
       var diagArray = [];
 
@@ -202,9 +217,13 @@
 
       var currentColumn = majorDiagonalColumnIndexAtFirstRow;
       var currentRow = 0;
-
+      // console.log(this);
+      // console.log(stepCount);
+      // console.log(currentRow);
+      // console.log(currentColumn);
       //do a while loop here, while stepCount is greater than 0;
       while (stepCount > 0) {
+
         diagArray.push(this.attributes[currentRow][currentColumn]);
 
         //incriment currentColumn
@@ -318,6 +337,14 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      // console.log('THIS IS THE MINOR DIAG COLUMN INDEX');
+      // console.log(minorDiagonalColumnIndexAtFirstRow);
+      if (minorDiagonalColumnIndexAtFirstRow < 0) {
+        return false;
+      } else if (minorDiagonalColumnIndexAtFirstRow >= this.attributes[0].length) {
+        var colIndex = minorDiagonalColumnIndexAtFirstRow - this.attributes[0].length + 1;
+        return (this.hasMinorDiagonalConflictAtBottom(colIndex));
+      }
       /**
        0  1  2  3
                  * -> [1, 0, 1, 0]
@@ -331,8 +358,13 @@
              */
       var diagArray = [];
       var stepCount = minorDiagonalColumnIndexAtFirstRow + 1;
+      //var stepCount = minorDiagonalColumnIndexAtFirstRow;
       var currentColumn = minorDiagonalColumnIndexAtFirstRow;
       var currentRow = 0;
+
+      console.log(this);
+      console.log(stepCount);
+      console.log(currentColumn);
 
       while (stepCount > 0) {
         diagArray.push(this.attributes[currentRow][currentColumn]);
