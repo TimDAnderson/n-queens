@@ -238,7 +238,7 @@
         //decrement stepCount
         stepCount--;
       }
-      console.log(diagArray);
+      // console.log(diagArray);
 
       // check array to see if there is more than one 1
       let pieceCount = 0;
@@ -368,9 +368,9 @@
       var currentColumn = minorDiagonalColumnIndexAtFirstRow;
       var currentRow = 0;
 
-      console.log(this);
-      console.log(stepCount);
-      console.log(currentColumn);
+      // console.log(this);
+      // console.log(stepCount);
+      // console.log(currentColumn);
 
       while (stepCount > 0) {
         diagArray.push(this.attributes[currentRow][currentColumn]);

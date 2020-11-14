@@ -18,6 +18,26 @@
 // what is the rows method that is attached to board
   //rows returns an array of arrays
 
+window.findSolution = function (row, n, board, validator, callback) {
+  //if all rows exhausted
+  if ( row === n) {
+    callback();
+    return;
+  }
+
+  //iterate over possible decisions
+  for (var i = 0; i < n; i++) {
+    board.togglePiece(row, i);
+    if (!board[validator]()) {
+      var result = findSolution(row+1, n, board, validator, callback);
+      if (result) {
+        return result;
+      }
+    }
+    board.togglePiece(row, i);
+  }
+};
+
 
 window.findNRooksSolution = function(n) {
   //var solution = undefined; //fixme
@@ -221,23 +241,93 @@ window.countNRooksSolutions = function(n) {
 
 
 
-
-
-
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  console.log('TESTING THE N QUEENS SOLUTION');
-  console.log(n);
-  //var solution = undefined; //fixme
+  var board = new Board({n: n});
+  var solution = board.rows();
 
-  if (n === 0) {
-    return { 'n': 0 };
-  }
-  if (n === 1) {
-    return [[1]];
-  }
+  findSolution(0, n, board, 'hasAnyQueensConflicts', function () {
+    solution = _.map(board.rows(), function(row) {
+      return row.slice();
+    });
+  });
 
-  // create new board
+
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  return solution;
+};
+
+
+
+
+// // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
+// window.findNQueensSolution = function(n) {
+//   console.log('TESTING THE N QUEENS SOLUTION');
+//   console.log(n);
+//   //var solution = undefined; //fixme
+
+//   if (n === 0) {
+//     return { 'n': 0 };
+//   }
+//   if (n === 1) {
+//     return [[1]];
+//   }
+
+//   // create new board
+//   var myBoard = new Board({'n': n});
+//   console.log(myBoard);
+
+
+//   var recursiveHelper = function (r) {
+//     console.log('entering the recursive function');
+//     if (r === 0) {
+//       return 1;
+//     }
+
+//     for (var i = 0; i < (n); i++) {
+//       for (var j = 0; j < (n); j++) {
+//         console.log('doing stuff');
+//         //check if we can place a a piece here
+//         //check for conflict at i, j
+//         if (!myBoard.hasAnyQueenConflictsOn(i, j)) {
+//           myBoard.togglePiece(i, j);
+
+//           if (recursiveHelper(r - 1) === 1) {
+//             return 1;
+//           }
+//           //myBoard.togglePiece(i, j);
+//         }
+
+//       }
+
+//     }
+//     return 0;
+
+
+
+
+
+
+//   };
+
+
+//   console.log('THIS IS THE BOARD WE ARE SEARCHING FOR');
+//   recursiveHelper(n);
+//   console.log('PRINTING my board');
+//   console.log(myBoard);
+
+//   var matrix = [];
+
+//   for (let r = 0; r < myBoard.attributes['n']; r++) {
+//       matrix.push(myBoard.attributes[r]);
+//   }
+
+
+
+//     return matrix;
+
+// };
+
   // iterate over currentRow
   // put 1st piece at (0, 0)
 
@@ -260,7 +350,7 @@ window.findNQueensSolution = function(n) {
   // assuming that
 
 
-};
+
 
 
   // //make a new Board that is size n
