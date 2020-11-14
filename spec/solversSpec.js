@@ -50,9 +50,11 @@ describe('solvers', function() {
             return memo + col;
           }, 0);
         }, 0);
-
+        console.log('first test');
         expect(solutionBoard.get('n')).to.equal(n);
+        console.log('second test');
         expect(numPieces).to.equal(n);
+        console.log('third test');
         expect(solutionBoard.hasAnyQueensConflicts()).to.be.equal(false);
       });
 

@@ -89,7 +89,7 @@
       //this.attributes is an object.  the keys are the row arrays
       //a row index is going to be this.attributes[rowIndex]
       var currentRow = this.attributes[rowIndex];
-      console.log(this.attributes[rowIndex]);
+      //console.log(this.attributes[rowIndex]);
       // create a counter for (non-zero element)
       var pieceCount = 0;
 
@@ -153,6 +153,9 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      if (this.attributes['n'] === 0) {
+        return false;
+      }
 
       let columnIndexArray = this.attributes[0];
 
@@ -276,6 +279,9 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      if (this.attributes['n'] === 0) {
+        return false;
+      }
       /**
 
 
@@ -419,6 +425,9 @@ i = 1 [0, 0, 0, 0], <-index 1
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      if (this.attributes['n'] === 0) {
+        return false;
+      }
       /**
        0  1  2  3
                  * -> [1, 0, 1, 0]
